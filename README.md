@@ -58,7 +58,7 @@ Bagan : https://drive.google.com/file/d/1jAUUMYYMUqVvlWSDVirFODL402E1ik3j/view?u
 
 * `urls.py` (project) meneruskan pola URL ke `urls.py` milik app.
 * `urls.py` (app) menentukan fungsi view mana yang dieksekusi.
-* `views.py` mengeksekusi logika; bila perlu, mengambil/menulis data via `models.py` (ORM) ke database.
+* `views.py` mengambil/menulis data via `models.py` (ORM) ke database.
 * `views.py` merender `templates/*.html` dan mengembalikan `HttpResponse` ke klien.
 
 ---
