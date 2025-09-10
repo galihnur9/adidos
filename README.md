@@ -5,7 +5,7 @@ https://galih-nur41-adidos.pbp.cs.ui.ac.id
 
 ---
 
-## 1) Step-by-step yang saya lakukan (bukan sekadar mengikuti tutorial)
+## 1) Step-by-step yang saya lakukan
 
 1. **Menyiapkan ruang kerja proyek**
 
