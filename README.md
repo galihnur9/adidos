@@ -1,7 +1,7 @@
 # Adidos — PBP Django (MTV)
 
 **Tautan Aplikasi PWS:** 
-https://galih-nur41-adidos.pbp.cs.ui.ac.id/
+https://galih-nur41-adidos.pbp.cs.ui.ac.id
 
 ---
 
