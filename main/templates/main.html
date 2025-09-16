@@ -1,9 +1,42 @@
+ {% extends 'base.html' %}
+ {% block content %}
 <h1>Nama Aplikasi: </h1>
 <p>{{ nama_aplikasi }}</p>
 
 <h4>NPM: </h4>
-<p>{{ npm }}</p> <!-- Ubah sesuai dengan npm kamu -->
+<p>{{ npm }}</p>
 <h4>Nama: </h4>
-<p>{{ nama }}</p> <!-- Ubah sesuai dengan nama kamu -->
+<p>{{ nama }}</p>
 <h4>Kelas: </h4>
-<p>{{ kelas }}</p> <!-- Ubah sesuai dengan kelas kamu -->
+<p>{{ kelas }}</p> 
+<a href="{% url 'main:create_product' %}">
+  <button>+ Add Product</button>
+</a>
+
+<hr>
+
+{% if not product_list %}
+<p>Belum ada data produk nih.</p>
+{% else %}
+
+{% for product in product_list %}
+<div>
+  <h2><a href="{% url 'main:show_product' product.id %}">{{ product.name }}</a></h2>
+
+  {% if product.thumbnail %}
+  <img src="{{ product.thumbnail }}" alt="thumbnail" width="150" height="100">
+  <br />
+  {% endif %}
+  <p>{% if product.is_featured %}<b>Featured</b>{% endif %}</p>
+  <p>Harga: {{ product.price }}</p>
+  <p>{{ product.description|truncatewords:25 }}...</p>
+
+  <p><a href="{% url 'main:show_product' product.id %}"><button>Detail</button></a></p>
+</div>
+
+<hr>
+{% endfor %}
+
+{% endif %}
+
+ {% endblock content %}
