@@ -1,56 +1,175 @@
- {% extends 'base.html' %}
- {% block content %}
-<h1>Nama Aplikasi: </h1>
-<p>{{ nama_aplikasi }}</p>
+{% extends 'base.html' %}
+{% load static %}
 
-<h4>NPM: </h4>
-<p>{{ npm }}</p>
-<h4>Nama: </h4>
-<p>{{ nama }}</p>
-<h4>Kelas: </h4>
-<p>{{ kelas }}</p> 
-<a href="{% url 'main:create_product' %}">
-  <button>+ Add Product</button>
-</a>
+{% block meta %}
+<title>Adidos</title>
+{% endblock meta %}
 
-<a href="{% url 'main:logout' %}">
-  <button>Logout</button>
-</a>
+{% block content %}
+{% include 'navbar.html' %}
 
-<h5>User login: {{ username }}</h5>
-<h5>Sesi terakhir login: {{ last_login }}</h5>
+<!-- Hero Section -->
+<section class="hero-bg min-h-screen flex items-center justify-center relative overflow-hidden">
+  <!-- Background Image Carousel -->
+  <div class="absolute inset-0 bg-carousel">
+    <div class="carousel-image active" style="background-image: url('https://images.unsplash.com/photo-1744000253584-aad21a82d253?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80');"></div>
+    <div class="carousel-image" style="background-image: url('https://images.unsplash.com/photo-1620794341491-76be6eeb6946?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80');"></div>
+    <div class="carousel-image" style="background-image: url('https://images.unsplash.com/photo-1548920168-70d61248a912?ixlib=rb-4.0.3&auto=format&fit=crop&w=2064&q=80');"></div>
+    <div class="carousel-image" style="background-image: url('https://images.unsplash.com/photo-1551698618-1dfe5d97d256?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80');"></div>
+  </div>
+  
+  <!-- Dark Overlay -->
+  <div class="absolute inset-0 bg-black/50"></div>
+  
+  <!-- Content -->
+  <div class="relative z-10 text-center px-6">
+    <h1 class="text-7xl md:text-9xl font-black mb-6 text-gradient tracking-tight">
+      ADIDOS
+    </h1>
+    <p class="text-xl md:text-2xl text-white mb-8 font-light tracking-wide">
+      The best for you
+    </p>
+    <p class="text-lg text-white max-w-2xl mx-auto mb-12 leading-relaxed">
+      Experience premium quality sports gear designed for champions. Every product tells a story of excellence, innovation, and unstoppable performance.
+    </p>
+    <div class="flex flex-col sm:flex-row gap-4 justify-center">
+      <a href="#products" class="bg-white text-black px-8 py-4 rounded-full font-semibold text-lg transition-all duration-300 transform hover:scale-105 hover:shadow-2xl">
+        Explore Collection
+      </a>
+      <a href="{% url 'main:create_product' %}" class="border-2 border-white text-white px-8 py-4 rounded-full font-semibold text-lg transition-all duration-300 hover:bg-white hover:text-black">
+        Add Product
+      </a>
+    </div>
+  </div>
+  
+  <!-- Carousel Indicators - Posisi lebih tinggi dan di tengah -->
+  <div class="absolute bottom-24 left-1/2 transform -translate-x-1/2 flex justify-center space-x-3 z-20">
+    <button class="carousel-dot active w-3 h-3 rounded-full bg-white/50 hover:bg-white/80 transition-all duration-300" data-slide="0"></button>
+    <button class="carousel-dot w-3 h-3 rounded-full bg-white/30 hover:bg-white/50 transition-all duration-300" data-slide="1"></button>
+    <button class="carousel-dot w-3 h-3 rounded-full bg-white/30 hover:bg-white/50 transition-all duration-300" data-slide="2"></button>
+    <button class="carousel-dot w-3 h-3 rounded-full bg-white/30 hover:bg-white/50 transition-all duration-300" data-slide="3"></button>
+  </div>
+  
+  <!-- Scroll indicator - Posisi lebih rendah dan di tengah -->
+  <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce z-20">
+    <a href="#products" class="flex items-center justify-center w-12 h-12 rounded-full border-2 border-white/30 hover:border-white hover:bg-white/10 text-white hover:text-white transition-all duration-300 cursor-pointer">
+      <i class="fas fa-chevron-down text-xl"></i>
+    </a>
+  </div>
+</section>
 
-<hr>
+<!-- Products Section -->
+<section id="products" class="bg-black py-20">
+  <div class="max-w-7xl mx-auto px-6 lg:px-8">
+    
+    <!-- Filter Section -->
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-16 bg-gray-900/50 rounded-2xl border border-gray-800 p-6">
+      <div class="flex space-x-4 mb-4 sm:mb-0">
+        <a href="?" class="{% if request.GET.filter == 'all' or not request.GET.filter %}bg-white text-black{% else %}bg-gray-800 text-gray-300 hover:bg-gray-700{% endif %} px-6 py-3 rounded-full font-semibold transition-all duration-300 transform hover:scale-105">
+          All Products
+        </a>
+        <a href="?filter=my" class="{% if request.GET.filter == 'my' %}bg-white text-black{% else %}bg-gray-800 text-gray-300 hover:bg-gray-700{% endif %} px-6 py-3 rounded-full font-semibold transition-all duration-300 transform hover:scale-105">
+          My Products
+        </a>
+      </div>
+      {% if user.is_authenticated %}
+        <div class="text-sm text-gray-400">
+          Last login: {{ last_login }}
+        </div>
+      {% endif %}
+    </div>
+    
+    <!-- Product Grid -->
+    {% if not product_list %}
+      <div class="bg-gray-900/30 rounded-3xl border border-gray-800 p-16 text-center">
+        <div class="w-32 h-32 mx-auto mb-8 bg-gray-800 rounded-full flex items-center justify-center">
+          <i class="fas fa-box-open text-4xl text-gray-400"></i>
+        </div>
+        <h3 class="text-3xl font-bold text-white mb-4">No Products Yet</h3>
+        <p class="text-gray-400 mb-8 text-lg">
+          Be the first to showcase premium sports gear to our community.
+        </p>
+        <a href="{% url 'main:create_product' %}" class="bg-white text-black px-8 py-4 rounded-full font-semibold text-lg transition-all duration-300 transform hover:scale-105 hover:shadow-2xl">
+          <i class="fas fa-plus mr-2"></i>Create First Product
+        </a>
+      </div>
+    {% else %}
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+        {% for product in product_list %}
+          {% include 'card_product.html' with product=product %}
+        {% endfor %}
+      </div>
+    {% endif %}
+  </div>
+</section>
 
-<a href="?filter=all">
-    <button type="button">All Products</button>
-</a>
-<a href="?filter=my">
-    <button type="button">My Products</button>
-</a> 
+<!-- Footer Section -->
+<footer class="bg-gray-900 border-t border-gray-800 py-12">
+  <div class="max-w-7xl mx-auto px-6 lg:px-8">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 text-center md:text-left">
+      <div>
+        <h3 class="text-2xl font-black text-white mb-2">ADIDOS</h3>
+        <p class="text-gray-400">Premium Sports Excellence</p>
+      </div>
+      
+      <div>
+        <h4 class="text-white font-semibold mb-2">MADE BY</h4>
+        <p class="text-gray-400 text-sm">NPM: {{ npm }}</p>
+        <p class="text-gray-400 text-sm">Name: {{ nama }}</p>
+        <p class="text-gray-400 text-sm">Class: {{ kelas }}</p>
+      </div>
+    </div>
+    
+    <div class="border-t border-gray-800 mt-8 pt-8 text-center">
+      <p class="text-gray-500 text-sm">
+        © 2024 Adidos. All rights reserved. | Designed for premium sports experience.
+      </p>
+    </div>
+  </div>
+</footer>
 
-{% if not product_list %}
-<p>Belum ada data produk nih.</p>
-{% else %}
+<script>
+  // Smooth scroll for anchor links
+  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+      e.preventDefault();
+      document.querySelector(this.getAttribute('href')).scrollIntoView({
+        behavior: 'smooth'
+      });
+    });
+  });
+  
+  // Background Carousel
+  let currentSlide = 0;
+  const slides = document.querySelectorAll('.carousel-image');
+  const dots = document.querySelectorAll('.carousel-dot');
+  const totalSlides = slides.length;
+  
+  function showSlide(index) {
+    // Remove active class from all slides and dots
+    slides.forEach(slide => slide.classList.remove('active'));
+    dots.forEach(dot => dot.classList.remove('active'));
+    
+    // Add active class to current slide and dot
+    slides[index].classList.add('active');
+    dots[index].classList.add('active');
+  }
+  
+  function nextSlide() {
+    currentSlide = (currentSlide + 1) % totalSlides;
+    showSlide(currentSlide);
+  }
+  
+  // Auto-advance slides every 5 seconds
+  setInterval(nextSlide, 5000);
+  
+  // Dot click handlers
+  dots.forEach((dot, index) => {
+    dot.addEventListener('click', () => {
+      currentSlide = index;
+      showSlide(currentSlide);
+    });
+  });
+</script>
 
-{% for product in product_list %}
-<div>
-  <h2><a href="{% url 'main:show_product' product.id %}">{{ product.name }}</a></h2>
-
-  {% if product.thumbnail %}
-  <img src="{{ product.thumbnail }}" alt="thumbnail" width="150" height="100">
-  <br />
-  {% endif %}
-  <p>{% if product.is_featured %}<b>Featured</b>{% endif %}</p>
-  <p>Harga: {{ product.price }}</p>
-  <p>{{ product.description|truncatewords:25 }}...</p>
-
-  <p><a href="{% url 'main:show_product' product.id %}"><button>Detail</button></a></p>
-</div>
-
-<hr>
-{% endfor %}
-
-{% endif %}
-
- {% endblock content %}
+{% endblock content %}

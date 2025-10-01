@@ -1,32 +1,127 @@
 {% extends 'base.html' %}
-
 {% block meta %}
-<title>Login</title>
+<title>Login - Adidos</title>
 {% endblock meta %}
 
 {% block content %}
-<div class="login">
-  <h1>Login</h1>
-
-  <form method="POST" action="">
-    {% csrf_token %}
-    <table>
-      {{ form.as_table }}
-      <tr>
-        <td></td>
-        <td><input class="btn login_btn" type="submit" value="Login" /></td>
-      </tr>
-    </table>
-  </form>
-
-  {% if messages %}
-  <ul>
-    {% for message in messages %}
-    <li>{{ message }}</li>
-    {% endfor %}
-  </ul>
-  {% endif %} Don't have an account yet?
-  <a href="{% url 'main:register' %}">Register Now</a>
+<div class="min-h-screen bg-black flex items-center justify-center px-6">
+  <div class="w-full max-w-md">
+    
+    <!-- Logo & Title -->
+    <div class="text-center mb-12">
+      <h1 class="text-6xl font-black text-white mb-4 text-gradient">
+        ADIDOS
+      </h1>
+      <h2 class="text-2xl font-semibold text-white mb-2">Welcome Back</h2>
+      <p class="text-gray-400">Sign in to your premium sports account</p>
+    </div>
+    
+    <!-- Login Form -->
+    <div class="bg-gray-900/50 rounded-3xl border border-gray-800 p-8">
+      
+      <!-- Messages Display -->
+      {% if messages %}
+        <div class="mb-6">
+          {% for message in messages %}
+            <div class="bg-gray-800/80 border border-gray-600 text-white px-4 py-3 rounded-xl">
+              {{ message }}
+            </div>
+          {% endfor %}
+        </div>
+      {% endif %}
+      
+      <form method="POST" class="space-y-6">
+        {% csrf_token %}
+        
+        <!-- Username -->
+        <div>
+          <label for="{{ form.username.id_for_label }}" class="block text-white font-semibold mb-3">
+            Username
+          </label>
+          {{ form.username }}
+          {% if form.username.errors %}
+            <div class="mt-2 text-red-400 text-sm">
+              {{ form.username.errors.0 }}
+            </div>
+          {% endif %}
+        </div>
+        
+        <!-- Password -->
+        <div>
+          <label for="{{ form.password.id_for_label }}" class="block text-white font-semibold mb-3">
+            Password
+          </label>
+          {{ form.password }}
+          {% if form.password.errors %}
+            <div class="mt-2 text-red-400 text-sm">
+              {{ form.password.errors.0 }}
+            </div>
+          {% endif %}
+        </div>
+        
+        <!-- Submit Button -->
+        <button type="submit" 
+                class="w-full bg-white text-black py-4 px-6 rounded-full font-bold text-lg transition-all duration-300 hover:bg-gray-200 transform hover:scale-105 mt-8">
+          <i class="fas fa-sign-in-alt mr-2"></i>Sign In
+        </button>
+      </form>
+      
+      <!-- Register Link -->
+      <div class="mt-8 text-center">
+        <p class="text-gray-400">
+          Don't have an account? 
+          <a href="{% url 'main:register' %}" class="text-white font-semibold hover:text-gray-300 transition-colors">
+            Join Adidos
+          </a>
+        </p>
+      </div>
+    </div>
+    
+    <!-- Back to Home -->
+    <div class="text-center mt-8">
+      <a href="{% url 'main:show_main' %}" class="text-gray-400 hover:text-white transition-colors">
+        <i class="fas fa-arrow-left mr-2"></i>Back to Home
+      </a>
+    </div>
+  </div>
 </div>
+
+<style>
+  /* CSS yang lebih kuat untuk override browser defaults */
+  input[type="text"], 
+  input[type="password"] {
+    width: 100% !important;
+    background-color: #374151 !important; /* gray-800 */
+    border: 1px solid #4B5563 !important; /* gray-700 */
+    border-radius: 12px !important;
+    padding: 12px 16px !important;
+    color: #FFFFFF !important; /* white text */
+    font-size: 16px !important;
+    transition: all 0.3s ease !important;
+  }
+  
+  input[type="text"]:focus, 
+  input[type="password"]:focus {
+    border-color: #FFFFFF !important;
+    box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.2) !important;
+    outline: none !important;
+    background-color: #374151 !important;
+    color: #FFFFFF !important;
+  }
+  
+  input[type="text"]::placeholder, 
+  input[type="password"]::placeholder {
+    color: #9CA3AF !important; /* gray-400 */
+  }
+  
+  /* Override untuk autocomplete */
+  input:-webkit-autofill,
+  input:-webkit-autofill:hover,
+  input:-webkit-autofill:focus {
+    -webkit-box-shadow: 0 0 0 1000px #374151 inset !important;
+    -webkit-text-fill-color: #FFFFFF !important;
+    transition: background-color 5000s ease-in-out 0s !important;
+  }
+</style>
 
 {% endblock content %}
