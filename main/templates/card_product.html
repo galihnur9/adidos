@@ -1,6 +1,8 @@
 <div class="bg-gray-900/50 rounded-2xl border border-gray-800 overflow-hidden card-hover group">
+  <div class="absolute inset-0 bg-gradient-to-r from-white/0 via-white/5 to-white/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
   <!-- Product Image -->
   <div class="relative h-64 bg-gradient-to-br from-gray-800 to-gray-900 overflow-hidden">
+    <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent animate-pulse"></div>
     {% if product.thumbnail %}
       <img src="{{ product.thumbnail }}" alt="{{ product.name }}" 
            class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">

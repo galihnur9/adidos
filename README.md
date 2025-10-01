@@ -1,4 +1,4 @@
-# Adidos — Tugas 3
+# Adidos — Tugas 5
 
 **Tautan Aplikasi PWS:** 
 https://galih-nur41-adidos.pbp.cs.ui.ac.id
@@ -7,118 +7,77 @@ https://galih-nur41-adidos.pbp.cs.ui.ac.id
 
 ## 1) Step-by-step yang saya lakukan
 
-1. **Membuat Fungsi Form dan Registrasi**
+1. **Menambahkan Tailwind ke Aplikasi**
 
-   * Menambahkan fungsi register di dalam `views.py`, dan menggunakan `UserCreationForm` yang telah diimpor
-   * Membuat berkas baru dengan nama `register.html` pada direktori `main/templates`, lalu dirouting ke halaman register di `urls.py`
+   * Tambahkan script cdn tailwind di bagian head di dalam `templates/base.html`.
 
-2. **Membuat Fungsi Login**
+2. **Menambahkan Fitur Edit Product dan Hapus Product**
 
-   * Menambahkan fungsi login_user di dalam `views.py`, dan menggunakan `AuthenticationForm` yang telah diimpor
-   * Membuat berkas baru dengan nama `login.html` pada direktori `main/templates`, lalu dirouting ke halaman register di `urls.py`
+   * Menambahkan fungsi `edit_product` dan `delete_product`  di dalam `views.py`
+   * Membuat berkas baru dengan nama `edit_product.html` pada direktori `main/templates`
+   * Menambahkan path url keduanya di `urls.py`
 
-3. **Membuat Fungsi Logout**
+3. **Menambahkan Navigation Bar**
 
-   * Menambahkan fungsi logout_user di dalam `views.py`
-   * Update berkas `main.html` untuk menambahkan tombol logout
-   * Update berkas `urls.py` agar dapat mengakses fungsi tersebut
+   * Membuat berkas baru bernama `navbar.html` pada folder `templates/` di root directory
+   * Menautkan navbar tersebut ke dalam `main.html` dengan menggunakan tag `include`
 
-4. **Merestriksi Akses Halaman Main dan News Detail**
+4. **Konfigurasi Static Files**
 
-   * Menambah potongan kode `@login_required(login_url='/login')` di atas fungsi `show_main` dan `show_product`, agar halaman utama dan product detail hanya dapat diakses oleh user yang sudah login
+   * Menambahkan middleware WhiteNoise pada `settings.py`
+   * Konfigurasi variabel STATIC_ROOT, STATICFILES_DIRS, dan STATIC_URL agar merujuk
+   ke /static root project
 
-5. **Menggunakan Data dari Cookies**
+5. **Styling dengan Tailwind dengan External CSS dan Inline CSS**
 
-   * Menambahkan import `HttpResponseRedirect`, `reverse`, dan `datetime` pada bagian paling atas `views.py`
-   * Mengubah bagian kode `login_user` untuk menyimpan cookie baru bernama `last_login`
-   * Update fungsi `show_main` dengan menambahkan potongan kode `'last_login': request.COOKIES['last_login']`
-   * Ubah fungsi `logout_user` untuk menghapus cookie `last_login` setelah melakukan logout
-   * Menambahkan parameter `last_login` dan `username` yang sekarang sedang login di berkas `main.html` di direktori `main/templates`
-
-6. **Menghubungan Model Product dengan User**
-
-   * Menambahkan potongan kode `user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)` di `models.py` pada subdirektori `main`, agar dapat menghubungkan satu news dengan satu user melalui sebuah relationship
-   * Modifikasi fungsi `create_product` dan `show_main` di `views.py` pada subdirektori `main`
-   * Menambahkan tombol filter My dan All pada halaman `main.html` dan menampilkan nama author di `product_detail.html`
-
----
-
-## 2) Apa itu Django AuthenticationForm? Jelaskan juga kelebihan dan kekurangannya
-
-`AuthenticationForm` adalah kelas formulir bawaan Django yang digunakan untuk mengautentikasi pengguna dengan memvalidasi nama pengguna (atau email) dan kata sandi. Formulir ini merupakan bagian dari sistem autentikasi Django yang sudah teruji dan aman, dan dapat digunakan langsung untuk membuat tampilan login tanpa perlu mengimplementasikan logika validasi dari nol.
-Kelebihan :
-1. Cepat dan mudah digunakan
-2. Keamanan bawaan
-3. Terintegrasi penuh dengan ekosistem Django
-Kekurangan :
-1. Kurang fleksibel untuk login selain username
-2. Kustomisasi tampilan lumayan sulit
-3. Tidak cocok untuk alur autentikasi kompleks
+   * Modifikasi `global.css` di `static/css/global.css`, disini web saya menggunakan tema dark and white mirip web Adidas
+   * Styling navbar, Menampilkan nama store yaitu Adidos, home, create product, nama username dan logout, dan akan slowly menghilang ketika discroll ke bawah
+   * Styling halaman `login.html` dan `register.html` sehingga tema nya menjadi dark and white
+   * Styling halaman home bagian menu produk, dengan membuat file `card_product.html` di directory `main/templates`
+   * Jika belum ada produk, maka kita tampilkan foto `no_product.png` yang sudah dimasukkan di direktori `static/image`
+   * Gunakan `card_product.html` dan gambar `no_product.png` ke dalam `main.html`
+   * Saya menggunakan background carousel agar tampilan home utama terlihat menarik saat baru dibuka, referensi gambarnya saya ambil dari https://unsplash.com/
+   * Styling halaman detail product, tambahkan tombol Edit dan Delete agar bisa mengimplementasikan fungsi yang sudah dibuat di awal tadi
+   * Styling halaman Create Product dan Edit Product
 
 ---
 
-## 3) Apa perbedaan antara autentikasi dan otorisasi? Bagaiamana Django mengimplementasikan kedua konsep tersebut?
+## 2) Jika terdapat beberapa CSS selector untuk suatu elemen HTML, jelaskan urutan prioritas pengambilan CSS selector tersebut!
 
-Autentikasi adalah proses verifikasi "Siapa kamu", sedangkan otorisasi adalah proses verifikasi "Apa yang boleh kamu lakukan"
-Autentikasi di Django :
-1. Model User: Django menyediakan model User bawaan yang memiliki field penting seperti username, password, email, first_name, dan last_name.
-2. Framework Autentikasi: Django memiliki serangkaian fungsi untuk mengelola siklus hidup login pengguna.
-- `authenticate(request, username='...', password='...')`: Fungsi ini memeriksa kredensial terhadap database. Jika berhasil, fungsi ini mengembalikan objek user. Jika gagal, akan mengembalikan None.
-- `login(request, user)`: Fungsi ini mengambil objek request dan objek user (dari authenticate) lalu membuat sesi (session) untuk pengguna tersebut di browser.
-- `logout(request)`: Menghapus data sesi pengguna, sehingga pengguna keluar dari sistem.
-3. Formulir Bawaan: Seperti AuthenticationForm untuk proses login dan UserCreationForm untuk registrasi, yang menyederhanakan proses pengambilan dan validasi input dari pengguna.
-4. Middleware: SessionMiddleware dan AuthenticationMiddleware bekerja sama untuk mengaitkan sesi dengan request dan menambahkan objek user ke setiap objek request (request.user) setelah pengguna login.
-Otorisasi di Django :
-1. Izin Bawaan (Default Permissions): Saat Anda membuat sebuah model, Django secara otomatis menciptakan empat izin dasar: add, change, view, dan delete. Contoh: untuk model Article, akan ada izin blog.add_article, blog.change_article, dll.
-2. Grup (Groups): Untuk mempermudah pengelolaan, Anda bisa membuat grup dan memberikan serangkaian izin ke grup tersebut.
-3. Pemeriksaan Izin: Django menyediakan beberapa cara untuk memeriksa otorisasi pengguna sebelum mengizinkan sebuah aksi:
-- Decorator di Views
-- Mixin di Class-Based Views
-- Pemeriksaan Manual
+Berikut adalah urutan prioritas dari yang paling rendah hingga yang paling tinggi:
+1. Selector Universal (*): Ini adalah selector yang paling rendah dalam urutan prioritas dan memiliki nilai specificity 0.
+2. Selector Elemen dan Pseudo-elemen: Selector ini memiliki bobot yang rendah, seperti `div`, `p`, atau `h1`, dan nilai specificity-nya adalah 0, 0, 1.
+2. Class, Pseudo-class, dan Attribute Selector: Selector ini seperti `.container`, `:hover`, atau `[type="text"]` memiliki nilai specificity 0, 1, 0.
+4. ID Selector: ID memiliki bobot yang lebih tinggi dibandingkan class dan elemen. Selector seperti `#header` memiliki nilai specificity 1, 0, 0.
+5. Inline Styles: Jika Anda memberikan style langsung pada elemen melalui atribut `style`, seperti `<h1 style="color: red;">`, nilai specificity-nya adalah 1, 0, 0, 0.
+6. !important: Meskipun ini bukan bagian dari specificity secara teknis, menambahkan `!important` pada aturan CSS akan mengesampingkan semua aturan lain kecuali inline styles yang juga menggunakan `!important`. Namun, penggunaan `!important` sebaiknya dibatasi karena bisa menyulitkan pemeliharaan kode di masa depan.
+
 
 ---
 
-## 4) Apa saja kelebihan dan kekurangan session dan cookies dalam konteks menyimpan state di aplikasi web? 
+## 3) Mengapa responsive design menjadi konsep yang penting dalam pengembangan aplikasi web? Berikan contoh aplikasi yang sudah dan belum menerapkan responsive design, serta jelaskan mengapa!
 
-Kelebihan Session (server-side)
-1. Lebih aman, Data sebenarnya (misalnya, user_id, is_admin, isi keranjang belanja) disimpan di server.
-2. Kapasitas penyimpanan lebih besar, karena data disimpan di server, batas penyimpanannya jauh lebih besar daripada cookie.
-Kekurangan Session (server-side)
-1. Skalabilitas Lebih Rumit, dalam lingkungan dengan banyak server (load balancing), pengelolaan sesi menjadi tantangan.
-2. Beban pada Memori Server, setiap sesi pengguna yang aktif akan menggunakan memori atau penyimpanan di server.
+Responsive design penting karena memastikan aplikasi web memberikan pengalaman pengguna (user experience) yang optimal di berbagai perangkat dengan ukuran layar berbeda, mulai dari desktop hingga ponsel.
+Contoh aplikasi yang sudah menerapkan : https://kompas.com
+Saat dibuka di desktop, Kompas.com menampilkan layout multi-kolom dengan banyak berita dan iklan di samping. Namun, saat diakses dari ponsel, layout secara otomatis berubah menjadi satu kolom vertikal. Ukuran font menjadi lebih besar dan mudah dibaca, menu navigasi disembunyikan di dalam ikon "hamburger" (☰), dan gambar menyesuaikan lebar layar. Ini dilakukan karena mayoritas pembaca berita mengaksesnya secara mobile, sehingga pengalaman membaca yang nyaman di perangkat kecil menjadi prioritas utama.
+Contoh aplikasi yang belum menerapkan : https://academic.ui.ac.id/
+Karena tidak responsif, pengguna di ponsel ngepinch untuk memperbesar (pinch-to-zoom) dan menggeser layar (pan) ke segala arah hanya untuk bisa membaca teks atau mengklik navigasi. Pengalaman ini sangat tidak nyaman dan menunjukkan dengan jelas masalah yang diselesaikan oleh responsive design.
 
-Kelebihan Cookie (client-side)
-1. Beban Server Ringan, karena data disimpan di sisi klien, server tidak perlu mengalokasikan memori untuk menyimpan informasi state pengguna
-2. Implementasi Sederhana, sangat mudah untuk dibuat dan digunakan untuk menyimpan data sederhana
-Kekurangan Cookie (clinet-side)
-1. Tidak Aman, data disimpan dalam bentuk teks biasa di browser pengguna. Siapa pun yang memiliki akses fisik ke komputer atau melalui serangan Cross-Site Scripting (XSS) dapat membaca atau memodifikasi isinya.
-2. Ukuran Terbatas, sebagian besar browser membatasi ukuran cookie hingga sekitar 4KB. Ini membuatnya tidak cocok untuk menyimpan data yang kompleks atau besar.
 
 ---
 
-## 5) Apakah penggunaan cookies aman secara default dalam pengembangan web, atau apakah ada risiko potensial yang harus diwaspadai? Bagaimana Django menangani hal tersebut?
+## 4) Jelaskan perbedaan antara margin, border, dan padding, serta cara untuk mengimplementasikan ketiga hal tersebut!
 
-Tidak, penggunaan cookies tidak aman secara default. Sebaliknya, cookies secara inheren rentan terhadap beberapa serangan jika tidak dikelola dengan benar, karena data disimpan dan dikirim dari sisi klien (browser).
-Risiko Potensial yang Harus Diwaspadai :
-1. Cross-Site Scripting (XSS)
-Ini adalah serangan di mana penyerang berhasil menyuntikkan skrip berbahaya (biasanya JavaScript) ke dalam halaman web yang dilihat oleh pengguna lain.
-2. Cross-Site Request Forgery (CSRF)
-Ini adalah serangan yang menipu pengguna yang sudah terautentikasi untuk melakukan tindakan yang tidak diinginkan di sebuah aplikasi web.
+Margin adalah ruang transparan di luar border yang berfungsi untuk menciptakan jarak antara elemen tersebut dengan elemen lainnya. Border adalah garis yang mengelilingi konten dan padding, yang bisa diatur ketebalan, gaya, dan warnanya. Sedangkan padding adalah ruang transparan di dalam border yang berfungsi untuk memberi jarak antara border dengan konten di dalamnya.
+Cara mengimplementasikan ketiga hal tersebut adalah :
+`margin: 10px` untuk memberi jarak 10px dari elemen lain.
+`padding: 10px` untuk memberi ruang 10px antara konten dan border.
+`border: 1px solid black` untuk membuat garis batas setebal 1px.
 
-Bagaimana Django Mengamankan Penggunaan Cookies :
-1. Perlindungan Terhadap CSRF: CsrfViewMiddleware
-Django memiliki sistem pertahanan CSRF yang sangat efektif dan aktif secara default.
-Cara Kerja:
-- Django mengirimkan cookie CSRF dengan token rahasia yang acak ke pengguna.
-- Saat me-render formulir HTML melalui {% csrf_token %}, Django menyisipkan input tersembunyi yang berisi nilai token yang sama.
-- Ketika formulir dikirim (POST), Django akan memverifikasi bahwa token dari cookie cocok dengan token dari input tersembunyi.
-Hasilnya, penyerang dari situs lain tidak akan tahu nilai token rahasia ini, sehingga setiap upaya pemalsuan permintaan akan gagal karena validasi token tidak cocok.
-2. Perlindungan Terhadap XSS: Atribut HttpOnly
-Ini adalah pertahanan utama terhadap pencurian cookie melalui XSS.
-Cara Kerja: Django mengatur atribut HttpOnly menjadi True pada cookie sesinya secara default. Atribut ini memberitahu browser bahwa cookie tersebut tidak boleh diakses oleh skrip sisi klien (JavaScript).
-Hasilnya, sekalipun penyerang berhasil menyuntikkan skrip jahat ke halaman Anda, skrip tersebut tidak akan bisa membaca cookie sesi, sehingga pembajakan sesi dapat dicegah. Anda dapat mengontrol ini melalui pengaturan SESSION_COOKIE_HTTPONLY.
-3. Perlindungan Tambahan
-- Atribut secure, memastikan cookie hanya dikirim melalui koneksi HTTPS yang terenkripsi, melindunginya dari penyadapan di jaringan yang tidak aman (Man-in-the-Middle attack).
-- Atribut SameSite, memberikan lapisan pertahanan tambahan terhadap CSRF dengan mengontrol kapan cookie dikirim bersama permintaan lintas situs (cross-site).
+---
+
+## 5) Jelaskan konsep flex box dan grid layout beserta kegunaannya!
+
+Flexbox digunakan untuk tata letak satu dimensi (baris atau kolom) yang fokus pada penataan konten di dalam sebuah komponen, sedangkan Grid digunakan untuk tata letak dua dimensi (baris dan kolom) yang bertujuan membangun struktur atau kerangka utama halaman web.
 
 ---

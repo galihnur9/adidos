@@ -44,11 +44,6 @@
               {{ form.username.errors.0 }}
             </div>
           {% endif %}
-          {% if form.username.help_text %}
-            <div class="mt-2 text-gray-400 text-sm">
-              {{ form.username.help_text }}
-            </div>
-          {% endif %}
         </div>
         
         <!-- Password -->
@@ -62,11 +57,6 @@
               {{ form.password1.errors.0 }}
             </div>
           {% endif %}
-          {% if form.password1.help_text %}
-            <div class="mt-2 text-gray-400 text-sm">
-              {{ form.password1.help_text }}
-            </div>
-          {% endif %}
         </div>
         
         <!-- Confirm Password -->
@@ -78,11 +68,6 @@
           {% if form.password2.errors %}
             <div class="mt-2 text-red-400 text-sm">
               {{ form.password2.errors.0 }}
-            </div>
-          {% endif %}
-          {% if form.password2.help_text %}
-            <div class="mt-2 text-gray-400 text-sm">
-              {{ form.password2.help_text }}
             </div>
           {% endif %}
         </div>
@@ -113,46 +98,5 @@
     </div>
   </div>
 </div>
-
-<style>
-  /* CSS yang lebih kuat untuk override browser defaults */
-  input[type="text"], 
-  input[type="password"], 
-  input[type="email"] {
-    width: 100% !important;
-    background-color: #374151 !important; /* gray-800 */
-    border: 1px solid #4B5563 !important; /* gray-700 */
-    border-radius: 12px !important;
-    padding: 12px 16px !important;
-    color: #FFFFFF !important; /* white text */
-    font-size: 16px !important;
-    transition: all 0.3s ease !important;
-  }
-  
-  input[type="text"]:focus, 
-  input[type="password"]:focus, 
-  input[type="email"]:focus {
-    border-color: #FFFFFF !important;
-    box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.2) !important;
-    outline: none !important;
-    background-color: #374151 !important; /* tetap gray-800 */
-    color: #FFFFFF !important; /* tetap white */
-  }
-  
-  input[type="text"]::placeholder, 
-  input[type="password"]::placeholder, 
-  input[type="email"]::placeholder {
-    color: #9CA3AF !important; /* gray-400 */
-  }
-  
-  /* Override untuk autocomplete */
-  input:-webkit-autofill,
-  input:-webkit-autofill:hover,
-  input:-webkit-autofill:focus {
-    -webkit-box-shadow: 0 0 0 1000px #374151 inset !important;
-    -webkit-text-fill-color: #FFFFFF !important;
-    transition: background-color 5000s ease-in-out 0s !important;
-  }
-</style>
 
 {% endblock content %}
