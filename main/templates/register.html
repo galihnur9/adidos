@@ -4,7 +4,7 @@
 {% endblock meta %}
 
 {% block content %}
-<div class="min-h-screen bg-black flex items-center justify-center px-6 py-12">
+<div class="min-h-screen bg-black flex items-center justify-center px-6">
   <div class="w-full max-w-md">
     
     <!-- Logo & Title -->
@@ -12,70 +12,59 @@
       <h1 class="text-6xl font-black text-white mb-4 text-gradient">
         ADIDOS
       </h1>
-      <h2 class="text-2xl font-semibold text-white mb-2">Join the Elite</h2>
-      <p class="text-gray-400">Create your premium sports account</p>
+      <h2 class="text-2xl font-semibold text-white mb-2">Join the Excellence</h2>
+      <p class="text-gray-400">Create your premium account</p>
     </div>
     
     <!-- Register Form -->
     <div class="bg-gray-900/50 rounded-3xl border border-gray-800 p-8">
       
-      <!-- Form Errors Display -->
-      {% if form.non_field_errors %}
-        <div class="mb-6">
-          {% for error in form.non_field_errors %}
-            <div class="bg-red-900/50 border border-red-700 text-red-200 px-4 py-3 rounded-xl">
-              {{ error }}
-            </div>
-          {% endfor %}
+      <!-- Error Messages -->
+      <div id="error-message" class="hidden mb-6">
+        <div class="bg-red-900/50 border border-red-600 text-red-300 px-4 py-3 rounded-xl">
+          <i class="fas fa-exclamation-circle mr-2 text-red-400"></i>
+          <span id="error-text"></span>
         </div>
-      {% endif %}
+      </div>
       
-      <form method="POST" class="space-y-6">
+      <form id="register-form" class="space-y-6">
         {% csrf_token %}
         
         <!-- Username -->
         <div>
-          <label for="{{ form.username.id_for_label }}" class="block text-white font-semibold mb-3">
+          <label for="username" class="block text-white font-semibold mb-3">
             Username
           </label>
-          {{ form.username }}
-          {% if form.username.errors %}
-            <div class="mt-2 text-red-400 text-sm">
-              {{ form.username.errors.0 }}
-            </div>
-          {% endif %}
+          <input type="text" id="username" name="username" required
+                 class="w-full bg-gray-800 border border-gray-700 rounded-xl px-4 py-3 text-white placeholder-gray-500 focus:border-white focus:ring-2 focus:ring-white/20 focus:outline-none transition-all duration-300"
+                 placeholder="Choose your username">
         </div>
         
         <!-- Password -->
         <div>
-          <label for="{{ form.password1.id_for_label }}" class="block text-white font-semibold mb-3">
+          <label for="password1" class="block text-white font-semibold mb-3">
             Password
           </label>
-          {{ form.password1 }}
-          {% if form.password1.errors %}
-            <div class="mt-2 text-red-400 text-sm">
-              {{ form.password1.errors.0 }}
-            </div>
-          {% endif %}
+          <input type="password" id="password1" name="password1" required
+                 class="w-full bg-gray-800 border border-gray-700 rounded-xl px-4 py-3 text-white placeholder-gray-500 focus:border-white focus:ring-2 focus:ring-white/20 focus:outline-none transition-all duration-300"
+                 placeholder="Create a strong password">
         </div>
         
         <!-- Confirm Password -->
         <div>
-          <label for="{{ form.password2.id_for_label }}" class="block text-white font-semibold mb-3">
+          <label for="password2" class="block text-white font-semibold mb-3">
             Confirm Password
           </label>
-          {{ form.password2 }}
-          {% if form.password2.errors %}
-            <div class="mt-2 text-red-400 text-sm">
-              {{ form.password2.errors.0 }}
-            </div>
-          {% endif %}
+          <input type="password" id="password2" name="password2" required
+                 class="w-full bg-gray-800 border border-gray-700 rounded-xl px-4 py-3 text-white placeholder-gray-500 focus:border-white focus:ring-2 focus:ring-white/20 focus:outline-none transition-all duration-300"
+                 placeholder="Confirm your password">
         </div>
         
         <!-- Submit Button -->
-        <button type="submit" 
+        <button type="submit" id="register-btn"
                 class="w-full bg-white text-black py-4 px-6 rounded-full font-bold text-lg transition-all duration-300 hover:bg-gray-200 transform hover:scale-105 mt-8">
-          <i class="fas fa-user-plus mr-2"></i>Join Adidos
+          <i class="fas fa-user-plus mr-2"></i>
+          <span id="register-text">Create Account</span>
         </button>
       </form>
       
@@ -98,5 +87,89 @@
     </div>
   </div>
 </div>
+
+<script>
+document.getElementById('register-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const registerBtn = document.getElementById('register-btn');
+    const errorMessage = document.getElementById('error-message');
+    const errorText = document.getElementById('error-text');
+    
+    // Show loading state
+    registerBtn.disabled = true;
+    registerBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i><span>Creating Account...</span>';
+    
+    // Hide previous errors
+    errorMessage.classList.add('hidden');
+    
+    // Prepare form data
+    const formData = new FormData(this);
+    
+    fetch('{% url "main:register_ajax" %}', {
+        method: 'POST',
+        body: formData,
+        headers: {
+            'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+        }
+    })
+    .then(response => response.json())
+    .then(result => {
+        if (result.success) {
+            // Show success toast
+            showToast(result.message, 'success');
+            
+            // Redirect after short delay
+            setTimeout(() => {
+                window.location.href = result.redirect_url;
+            }, 2000);
+        } else {
+            // Show error message
+            errorText.textContent = result.message;
+            errorMessage.classList.remove('hidden');
+            
+            // Show error toast
+            showToast(result.message, 'error');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        const errorMsg = 'Connection error. Please try again.';
+        errorText.textContent = errorMsg;
+        errorMessage.classList.remove('hidden');
+        showToast(errorMsg, 'error');
+    })
+    .finally(() => {
+        // Reset button state
+        registerBtn.disabled = false;
+        registerBtn.innerHTML = '<i class="fas fa-user-plus mr-2"></i><span>Create Account</span>';
+    });
+});
+
+// Toast notification function
+function showToast(message, type = 'success') {
+    // Remove existing toasts
+    const existingToasts = document.querySelectorAll('.toast');
+    existingToasts.forEach(toast => toast.remove());
+    
+    const toast = document.createElement('div');
+    const bgColor = type === 'success' ? 'bg-green-600' : 'bg-red-600';
+    const icon = type === 'success' ? 'fas fa-check-circle' : 'fas fa-exclamation-circle';
+    
+    toast.className = `toast fixed top-4 right-4 px-6 py-3 rounded-lg text-white transform translate-x-full transition-all duration-300 ${bgColor} flex items-center shadow-lg z-50`;
+    toast.innerHTML = `<i class="${icon} mr-2"></i>${message}`;
+    
+    document.body.appendChild(toast);
+    
+    // Animate in
+    setTimeout(() => toast.style.transform = 'translateX(0)', 100);
+    
+    // Animate out
+    setTimeout(() => {
+        toast.style.transform = 'translateX(100%)';
+        setTimeout(() => toast.remove(), 300);
+    }, 4000);
+}
+</script>
 
 {% endblock content %}

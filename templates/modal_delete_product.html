@@ -1,0 +1,46 @@
+<!-- Modal Delete Confirmation -->
+<div id="deleteModal" tabindex="-1" aria-hidden="true" class="hidden fixed inset-0 z-50 w-full flex items-center justify-center bg-gray-800 bg-opacity-50 overflow-x-hidden overflow-y-auto transition-opacity duration-300 ease-out">
+  <div id="deleteModalContent" class="relative bg-gray-900 rounded-lg shadow-lg w-5/6 sm:w-3/4 md:w-1/2 lg:w-1/3 mx-4 sm:mx-0 transform scale-95 opacity-0 transition-transform transition-opacity duration-300 ease-out border border-gray-700">
+    <!-- Modal header -->
+    <div class="flex items-center justify-between p-4 border-b border-gray-700 rounded-t">
+      <h3 class="text-xl font-semibold text-white">
+        <i class="fas fa-exclamation-triangle text-red-500 mr-2"></i>Delete Product
+      </h3>
+      <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-700 hover:text-white rounded-lg text-sm p-1.5 ml-auto inline-flex items-center" id="closeDeleteModalBtn">
+        <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+          <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+        </svg>
+        <span class="sr-only">Close modal</span>
+      </button>
+    </div>
+    
+    <!-- Modal body -->
+    <div class="px-6 py-4 space-y-6">
+      <div class="text-center">
+        <div class="w-20 h-20 mx-auto mb-4 bg-red-600 rounded-full flex items-center justify-center">
+          <i class="fas fa-trash text-3xl text-white"></i>
+        </div>
+        <h3 class="text-lg font-semibold text-white mb-2">Are you absolutely sure?</h3>
+        <p class="text-gray-400 mb-4">
+          You are about to permanently delete 
+          <strong id="delete-product-name" class="text-white"></strong>. 
+        </p>
+        <p class="text-red-400 text-sm mb-4">
+          <i class="fas fa-exclamation-circle mr-1"></i>
+          This action cannot be undone and will remove all product data.
+        </p>
+        {% csrf_token %}
+      </div>
+    </div>
+    
+    <!-- Modal footer -->
+    <div class="flex flex-col space-y-2 md:flex-row md:space-y-0 md:space-x-2 p-6 border-t border-gray-700 rounded-b justify-center md:justify-end">
+      <button type="button" class="bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded-lg transition-all duration-300" id="cancelDeleteButton">
+        <i class="fas fa-times mr-2"></i>Cancel
+      </button>
+      <button type="button" id="confirmDeleteBtn" class="bg-red-700 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-lg transition-all duration-300">
+        <i class="fas fa-trash mr-2"></i>Yes, Delete Product
+      </button>
+    </div>
+  </div>
+</div>
