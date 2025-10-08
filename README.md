@@ -51,4 +51,5 @@ Memperlakukan semua input dari pengguna sebagai teks biasa (bukan kode) saat men
 ## 5) Bagaimana AJAX mempengaruhi pengalaman pengguna (User Experience) pada website?
 
 AJAX (Asynchronous JavaScript and XML) secara fundamental meningkatkan user experience (UX) dengan membuat website terasa lebih cepat, responsif, dan interaktif seperti aplikasi desktop, terutama dengan menghilangkan kebutuhan untuk memuat ulang (reload) seluruh halaman.
+
 ---
